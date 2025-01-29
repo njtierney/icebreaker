@@ -9,6 +9,7 @@
 #' @author njtierney
 #' @export
 write_ice_gif <- function(ice_rasts = ice_rasts,
+                          ice_map = ice_map,
                           gif_file = "sea_ice.gif") {
 
   png_dir <- tempdir()
@@ -24,8 +25,14 @@ write_ice_gif <- function(ice_rasts = ice_rasts,
       ice_rasts[[i]],
       range = c(0, 100),
       col = gray.colors(n = 100, start = 0, end = 0.9),
-      background = "saddlebrown",
+      background = "black",
       main = date_title
+    )
+    plot(
+      ice_map,
+      lwd = 2,
+      border = "hotpink",
+      add = TRUE
     )
     dev.off()
   }

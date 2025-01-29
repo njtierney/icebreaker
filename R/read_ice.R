@@ -22,10 +22,10 @@ read_ice <- function(file,
   crs(ice) <- "EPSG:3976"
   cropped_ice <- crop(ice, crop_ext)[[1]]
   # create land
-  cropped_ice[cropped_ice > 250] <- NA
+  cropped_ice[cropped_ice > 119] <- NA
   # resolve a scaling issue - due to values being byte encoded
-  cropped_ice <- cropped_ice / 2.5
-  cropped_ice
-  time(cropped_ice) <- time
+  # cropped_ice <- cropped_ice / 2.5
+  # cropped_ice
+  terra::time(cropped_ice) <- time
   cropped_ice
 }
