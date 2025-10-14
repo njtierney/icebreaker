@@ -1,0 +1,60 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+
+# icebreaker
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+The goal of icebreaker is to practice using geotargets to answer questions and use real data.
+
+In this case, thanks to the gracrious assstance of [@mdsumner](https://github.com/mdsumner/), we explore how sea ice near [Casey Station](https://en.wikipedia.org/wiki/Casey_Station) in Antarctica changes over time.
+
+We used [geotargets](https://github.com/njtierney/geotargets) and [dynamic branching](http://geotargets.njtierney.com/articles/tar_terra_tiles.html) to cleverly read in many rasters and not overload local memory.
+
+As a first exploration, we produced this gif:
+
+![Sea ice changes over time near Casey station](sea_ice.gif)
+
+## sea ice summaries
+
+```{r}
+library(targets)
+tar_source()
+source("packages.R")
+tar_load(ice_summary)
+tar_load(plotted_ice_summaries)
+date_summary <- summary(ice_summary$time)
+date_summary
+
+```
+
+We can get the aggregate of ice thickness by microwave - we can see the dates from `r min(date_summary)` to `r max(date_summary)`.
+
+```{r}
+ice_summary
+```
+
+We can also plot the median sea ice thickness
+
+```{r}
+plotted_ice_summaries
+```
+
+And even have this as a POLAR CO-ORDINATE system!
+
+```{r}
+plotted_ice_summaries + coord_polar()
+```
+
