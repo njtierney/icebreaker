@@ -17,7 +17,6 @@ tar_option_set(
 
 ## tar_plan supports drake-style targets and also tar_target()
 tar_assign({
-
   files <- na.omit(amsrfiles()) |> tar_target()
 
   # files_to_read_in = tail(files, 5000),
@@ -28,24 +27,25 @@ tar_assign({
 
   # then next let's add a crossing with another station
 
-  ice_rasts <- tar_terra_rast(
-    read_ice(ice_files, ice_dates),
-    pattern = map(ice_files, ice_dates),
-    memory = "transient"
-  )
+  ice_rasts <- read_ice(ice_files, ice_dates) |>
+    tar_terra_rast(
+      pattern = map(ice_files, ice_dates),
+      memory = "transient"
+    )
 
-  ice_summary <- tar_target(
-    summarise_ice(ice_rasts),
-    pattern = map(ice_rasts)
-  )
+  ice_summary <- summarise_ice(ice_rasts) |>
+    tar_target(
+      pattern = map(ice_rasts)
+    )
 
   plotted_ice_summaries <- gg_ice(ice_summary) |> tar_target()
 
   ice_map <- get_antarctic_coastline(ice_rasts) |> tar_terra_vect()
 
-  ice_gifs <- write_ice_gif(ice_rasts = ice_rasts,
-                            ice_map = ice_map,
-                            gif_file = "sea_ice.gif") |> tar_file()
-
-  })
-
+  ice_gifs <- write_ice_gif(
+    ice_rasts = ice_rasts,
+    ice_map = ice_map,
+    gif_file = "sea_ice.gif"
+  ) |>
+    tar_file()
+})
